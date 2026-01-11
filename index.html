@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Grego Prioli Personal | Treino Online MFIT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: 
+                linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+                url("https://actionacademia.com.br/background2.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: #f2f2f2;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .logo {
+            max-width: 180px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.6em;
+            color: #00ff88;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #ccc;
+        }
+
+        section {
+            padding: 30px 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(20,20,20,0.9);
+            padding: 30px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .card h2 {
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+
+        .card p, .card li {
+            color: #ddd;
+            font-size: 1.05em;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .precos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .plano {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .plano h3 {
+            color: #00ff88;
+            margin-bottom: 10px;
+        }
+
+        .valor {
+            font-size: 1.9em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .btn-whatsapp {
+            display: inline-block;
+            margin-top: 25px;
+            background: #25D366;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1ebc59;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: rgba(0,0,0,0.85);
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.1em;
+            }
+
+            .logo {
+                max-width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <!-- LOGO -->
+    <img src="https://www.mfitpersonal.com.br/assets/img/brand/logo-mfit-horizontal-branco.png" class="logo">
+
+    <h1>Grego Prioli Personal</h1>
+    <p>Treino Online com Acompanhamento • App MFIT Personal</p>
+</header>
+
+<section>
+
+    <div class="card">
+        <h2>Como funciona</h2>
+        <p>
+            Treinamento <strong>100% online</strong> através do aplicativo
+            <strong>MFIT Personal</strong>, com acompanhamento profissional contínuo.
+        </p>
+
+        <ul>
+            <li>📲 Treinos direto no aplicativo</li>
+            <li>🎯 Planejamento individual</li>
+            <li>📊 Evolução acompanhada</li>
+            <li>💬 Suporte constante</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Valores – Treino Online</h2>
+
+        <div class="precos">
+            <div class="plano">
+                <h3>Plano Mensal</h3>
+                <div class="valor">R$ 70</div>
+                <p>1 mês</p>
+            </div>
+
+            <div class="plano">
+                <h3>Plano 2 Meses</h3>
+                <div class="valor">R$ 120</div>
+                <p>Acompanhamento contínuo</p>
+            </div>
+
+            <div class="plano">
+                <h3>Plano 3 Meses</h3>
+                <div class="valor">R$ 180</div>
+                <p>Melhor custo-benefício</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Aulas Presenciais</h2>
+        <div class="valor">R$ 70 por aula</div>
+    </div>
+
+    <div class="card">
+        <h2>Contato</h2>
+        <p>
+            📱 WhatsApp: <strong>(34) 99192 3068</strong><br>
+            📍 Atendimento: Online e Presencial
+        </p>
+
+        <a class="btn-whatsapp" href="https://wa.me/5599999999999" target="_blank">
+            Quero começar agora
+        </a>
+    </div>
+
+</section>
+
+<footer>
+    © <span id="ano"></span> Grego Prioli Personal • Treino Online via MFIT
+</footer>
+
+<script>
+    document.getElementById("ano").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
