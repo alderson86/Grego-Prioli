@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Centro de Operações</title>
+<title>PROTOCOLO // LINK DESCONHECIDO</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -13,124 +14,335 @@
 }
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#05080d,#111827,#05080d);
-    color:#e6edf3;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    background:#020304;
+    color:#00ff88;
+    font-family:Consolas,monospace;
+    overflow:hidden;
 }
 
-.container{
-    width:700px;
-    background:rgba(22,27,34,.95);
-    border:1px solid #2f3d4d;
-    border-radius:12px;
-    padding:40px;
-    text-align:center;
-    box-shadow:0 0 35px rgba(0,0,0,.6);
+/* Fundo */
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    repeating-linear-gradient(
+        transparent 0px,
+        rgba(0,255,150,.03) 2px,
+        transparent 4px
+    );
+    animation:scan 8s linear infinite;
+    z-index:-1;
+}
+
+@keyframes scan{
+from{transform:translateY(-100%);}
+to{transform:translateY(100%);}
+}
+
+#terminal{
+
+width:95%;
+max-width:1200px;
+
+margin:25px auto;
+
+background:rgba(0,15,8,.90);
+
+border:1px solid #00ff88;
+
+padding:20px;
+
+box-shadow:
+0 0 10px #00ff88,
+0 0 30px rgba(0,255,136,.3);
+
 }
 
 h1{
-    color:#4fa3ff;
-    margin-bottom:25px;
-    letter-spacing:2px;
+
+color:#7dffcb;
+margin-bottom:10px;
+text-shadow:0 0 15px #00ff88;
+
 }
 
-#mensagem{
-    font-size:22px;
-    line-height:1.8;
-    min-height:160px;
-    margin-bottom:30px;
+.status{
+
+display:flex;
+gap:20px;
+margin:20px 0;
+flex-wrap:wrap;
+
+}
+
+.card{
+
+flex:1;
+min-width:220px;
+
+border:1px solid #00ff88;
+padding:10px;
+
+background:#02140d;
+
+}
+
+.card h3{
+
+color:#8fffd5;
+margin-bottom:10px;
+
+}
+
+#stream{
+
+height:320px;
+
+overflow:auto;
+
+white-space:pre-wrap;
+
+background:black;
+
+padding:15px;
+
+border:1px solid #00aa55;
+
+line-height:1.5;
+
 }
 
 button{
-    background:#1f6feb;
-    color:white;
-    border:none;
-    padding:15px 35px;
-    font-size:17px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.3s;
+
+margin-top:20px;
+
+padding:12px 25px;
+
+background:#00aa55;
+
+border:none;
+
+color:white;
+
+cursor:pointer;
+
+font-size:16px;
+
+transition:.3s;
+
 }
 
 button:hover{
-    background:#388bfd;
-    transform:scale(1.05);
+
+background:#00dd77;
+
+box-shadow:0 0 15px #00ff88;
+
 }
 
-footer{
-    margin-top:30px;
-    color:#8b949e;
-    font-size:14px;
+#translate{
+
+margin-top:20px;
+
+color:#8fffd5;
+
+font-size:18px;
+
 }
+
+.blink{
+
+animation:blink 1s infinite;
+
+}
+
+@keyframes blink{
+
+50%{opacity:0;}
+
+}
+
 </style>
 
 </head>
+
 <body>
 
-<div class="container">
+<canvas id="stars"></canvas>
 
-<h1>CENTRO DE OPERAÇÕES</h1>
+<div id="terminal">
 
-<p id="mensagem">
-Cada decisão molda o resultado. Observe, confirme os fatos e somente então avance. A pressa favorece o erro; a preparação favorece o sucesso.
-</p>
+<h1>TRANSMISSÃO EXTRASSOLAR</h1>
 
-<button onclick="novaMensagem()">
-Receber Briefing
+<p>Estado do Canal:
+<span class="blink">●</span>
+Conectado</p>
+
+<div class="status">
+
+<div class="card">
+<h3>Frequência</h3>
+<div id="freq">1420.405 MHz</div>
+</div>
+
+<div class="card">
+<h3>Intensidade</h3>
+<div id="signal">98.42%</div>
+</div>
+
+<div class="card">
+<h3>Origem</h3>
+<div>DESCONHECIDA</div>
+</div>
+
+<div class="card">
+<h3>Codificação</h3>
+<div>BINÁRIO 8 BITS</div>
+</div>
+
+</div>
+
+<div id="stream"></div>
+
+<button onclick="novaTransmissao()">
+Capturar Nova Transmissão
 </button>
 
-<footer>
-Sistema de Análise Estratégica
-</footer>
+<div id="translate">
+
+AGUARDANDO DECODIFICAÇÃO...
+
+</div>
 
 </div>
 
 <script>
 
-const mensagens=[
+/* Fundo estrelado */
 
-"Informação confiável vale mais do que dezenas de suposições.",
+const canvas=document.getElementById("stars");
 
-"Em momentos críticos, serenidade é uma ferramenta tão importante quanto conhecimento.",
+const ctx=canvas.getContext("2d");
 
-"A disciplina permite enxergar oportunidades onde outros veem apenas obstáculos.",
+canvas.width=innerWidth;
+canvas.height=innerHeight;
 
-"Questione evidências frágeis. Confirme aquilo que parece evidente.",
+const estrelas=[];
 
-"Planejamento reduz incertezas. Execução consistente produz resultados.",
+for(let i=0;i<350;i++){
 
-"Antes de agir, compreenda o cenário. Antes de concluir, reúna os fatos.",
+estrelas.push({
 
-"Confiança é conquistada por meio de decisões fundamentadas.",
+x:Math.random()*canvas.width,
 
-"O melhor recurso de uma equipe é a capacidade de pensar com clareza sob pressão.",
+y:Math.random()*canvas.height,
 
-"Nem toda resposta rápida é uma boa resposta. Precisão importa.",
+r:Math.random()*2
 
-"A estratégia começa quando a emoção deixa de comandar a decisão."
-
-];
-
-function novaMensagem(){
-
-const indice=Math.floor(Math.random()*mensagens.length);
-
-const texto=document.getElementById("mensagem");
-
-texto.style.opacity=0;
-
-setTimeout(()=>{
-    texto.innerHTML=mensagens[indice];
-    texto.style.opacity=1;
-},250);
+});
 
 }
 
-document.getElementById("mensagem").style.transition="opacity .25s";
+function desenhar(){
+
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff88";
+
+for(let s of estrelas){
+
+ctx.beginPath();
+
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+
+ctx.fill();
+
+s.y+=0.2;
+
+if(s.y>canvas.height)s.y=0;
+
+}
+
+requestAnimationFrame(desenhar);
+
+}
+
+desenhar();
+
+/* Comunicação */
+
+function byte(){
+
+return Math.floor(Math.random()*256)
+.toString(2)
+.padStart(8,"0");
+
+}
+
+const traducoes=[
+
+"SINAL RECEBIDO",
+
+"PACOTE CORROMPIDO",
+
+"SEQUÊNCIA ESTÁVEL",
+
+"PADRÃO DESCONHECIDO",
+
+"PROTOCOLO NÃO CATALOGADO",
+
+"ANALISANDO",
+
+"INTERFERÊNCIA DETECTADA",
+
+"SINCRONIZAÇÃO PARCIAL",
+
+"ESTRUTURA REPETITIVA",
+
+"PACOTE ACEITO"
+
+];
+
+function novaTransmissao(){
+
+let texto="";
+
+for(let i=0;i<24;i++){
+
+for(let j=0;j<10;j++){
+
+texto+=byte()+" ";
+
+}
+
+texto+="\n";
+
+}
+
+document.getElementById("stream").textContent=texto;
+
+document.getElementById("translate").innerHTML=
+"> "+traducoes[Math.floor(Math.random()*traducoes.length)];
+
+document.getElementById("signal").innerHTML=
+(90+Math.random()*10).toFixed(2)+"%";
+
+document.getElementById("freq").innerHTML=
+(1400+Math.random()*50).toFixed(3)+" MHz";
+
+}
+
+novaTransmissao();
+
+setInterval(novaTransmissao,6000);
 
 </script>
 
