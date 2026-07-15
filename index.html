@@ -1,216 +1,413 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="xx">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grego Prioli | Analista de Sistemas & Segurança</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𖤓 ⟟ XÆ-Ω :: Portal Alienígena</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:
+radial-gradient(circle at top,#2f0a57,#05010c 60%,#000);
+color:#77fff7;
+overflow:hidden;
+height:100vh;
+}
+
+canvas{
+position:fixed;
+inset:0;
+z-index:0;
+}
+
+.container{
+position:relative;
+z-index:2;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100vh;
+padding:20px;
+text-align:center;
+}
+
+.logo{
+font-size:65px;
+margin-bottom:20px;
+text-shadow:
+0 0 15px cyan,
+0 0 30px cyan,
+0 0 60px cyan;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+50%{
+transform:scale(1.1);
+}
+
+}
+
+h2{
+font-size:28px;
+letter-spacing:12px;
+margin-bottom:10px;
+}
+
+.alien{
+font-size:22px;
+letter-spacing:8px;
+line-height:2;
+max-width:900px;
+margin-bottom:30px;
+color:#9ffff7;
+}
+
+.panel{
+
+width:90%;
+max-width:900px;
+
+background:rgba(0,255,255,.05);
+
+border:1px solid cyan;
+
+border-radius:25px;
+
+padding:30px;
+
+backdrop-filter:blur(10px);
+
+box-shadow:0 0 30px cyan;
+}
+
+.icons{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+
+gap:20px;
+
+margin-top:25px;
+
+}
+
+.item{
+
+padding:20px;
+
+background:rgba(255,255,255,.04);
+
+border-radius:20px;
+
+transition:.4s;
+
+cursor:pointer;
+
+}
+
+.item:hover{
+
+transform:translateY(-8px) scale(1.08);
+
+box-shadow:0 0 25px cyan;
+
+background:rgba(0,255,255,.15);
+
+}
+
+.item i{
+
+font-size:40px;
+
+margin-bottom:10px;
+
+display:block;
+
+color:#00fff2;
+
+}
+
+.item div{
+
+font-size:24px;
+
+letter-spacing:6px;
+
+}
+
+button{
+
+margin-top:30px;
+
+padding:16px 45px;
+
+font-size:18px;
+
+border:none;
+
+border-radius:40px;
+
+background:#00fff2;
+
+color:black;
+
+cursor:pointer;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:scale(1.1);
+
+box-shadow:0 0 30px cyan;
+
+}
+
+#texto{
+
+margin-top:30px;
+
+font-size:24px;
+
+color:white;
+
+min-height:40px;
+
+text-shadow:0 0 15px cyan;
+
+}
+
+.scan{
+
+position:absolute;
+
+top:0;
+
+left:-100%;
+
+width:100%;
+
+height:4px;
+
+background:cyan;
+
+box-shadow:0 0 20px cyan;
+
+animation:scan 4s linear infinite;
+
+}
+
+@keyframes scan{
+
+100%{
+
+left:100%;
+
+}
+
+}
+
+footer{
+
+position:absolute;
+
+bottom:15px;
+
+font-size:14px;
+
+opacity:.5;
+
+letter-spacing:5px;
+
+}
+</style>
+
 </head>
+
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">&lt;Grego.Prioli/&gt;</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto text-center">
-                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#portfolio">Projetos & Atuação</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<canvas id="space"></canvas>
 
-    <header id="home" class="hero-section d-flex align-items-center bg-dark text-white text-center text-md-start">
-        <div class="container">
-            <div class="row align-items-center py-5">
-                <div class="col-md-7">
-                    <p class="text-primary fw-bold mb-2">Sistemas robustos, dados protegidos.</p>
-                    <h1 class="display-3 fw-bold mb-3">Grego Prioli</h1>
-                    <h2 class="text-muted h3 mb-4">Analista de Sistemas e Segurança da Informação.</h2>
-                    <p class="lead text-secondary mb-5">Especializado em arquitetura de sistemas seguros, análise de vulnerabilidades, compliance e desenvolvimento frontend focado em proteção de dados.</p>
-                    <div class="d-grid gap-3 d-md-flex justify-content-md-start">
-                        <a href="#portfolio" class="btn btn-primary btn-lg px-4 me-md-2">Ver Atuação</a>
-                        <a href="#contato" class="btn btn-outline-light btn-lg px-4">Solicitar Análise</a>
-                    </div>
-                </div>
-                <div class="col-md-5 text-center mt-5 mt-md-0">
-                    <div class="hero-avatar-container mx-auto">
-                        <img src="https://via.placeholder.com/350" alt="Grego Prioli" class="img-fluid rounded-circle border border-4 border-primary shadow">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+<div class="container">
 
-    <section id="portfolio" class="py-5 bg-light">
-        <div class="container py-4">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Projetos e Casos de Uso</h2>
-                <div class="heading-line mx-auto bg-primary"></div>
-                <p class="text-muted mt-3">Soluções desenvolvidas com foco em arquitetura de sistemas e segurança cibernética.</p>
-            </div>
-            
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0 project-card">
-                        <div class="card-body p-4">
-                            <span class="badge bg-primary-subtle text-primary mb-2">Segurança de Aplicações</span>
-                            <h5 class="card-title fw-bold mt-2">Gerador de Credenciais com Entropia</h5>
-                            <p class="card-text text-muted">Web app responsivo criado para analisar e gerar chaves criptográficas fortes, calculando a entropia em tempo real no lado do cliente.</p>
-                            <div class="tech-stack mt-3 mb-4">
-                                <span class="badge bg-secondary text-dark">JavaScript (ES6)</span>
-                                <span class="badge bg-secondary text-dark">Bootstrap 5</span>
-                                <span class="badge bg-secondary text-dark">Web Crypto API</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="#" class="text-decoration-none fw-bold text-primary">Ver Projeto <i class="fas fa-external-link-alt ms-1"></i></a>
-                                <a href="#" class="text-muted"><i class="fab fa-github fa-lg"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="scan"></div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0 project-card">
-                        <div class="card-body p-4">
-                            <span class="badge bg-success-subtle text-success mb-2">Análise de Sistemas</span>
-                            <h5 class="card-title fw-bold mt-2">Dashboard de Auditoria (SIEM UI)</h5>
-                            <p class="card-text text-muted">Protótipo de interface de monitoramento para centralização de logs e eventos de segurança, priorizando clareza visual e rápida tomada de decisão.</p>
-                            <div class="tech-stack mt-3 mb-4">
-                                <span class="badge bg-secondary text-dark">HTML5 / CSS3</span>
-                                <span class="badge bg-secondary text-dark">Chart.js</span>
-                                <span class="badge bg-secondary text-dark">UI/UX</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="#" class="text-decoration-none fw-bold text-success">Ver Demo <i class="fas fa-external-link-alt ms-1"></i></a>
-                                <a href="#" class="text-muted"><i class="fab fa-github fa-lg"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="logo">
+☉ ⟁ 𖤓 ⌬ ⟟ Ω
+</div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm border-0 project-card">
-                        <div class="card-body p-4">
-                            <span class="badge bg-danger-subtle text-danger mb-2">Hardening & Infra</span>
-                            <h5 class="card-title fw-bold mt-2">Automação de Políticas de Segurança</h5>
-                            <p class="card-text text-muted">Scripts e documentação estruturada para aplicação de baselines de segurança (CIS Benchmarks) em servidores web de forma automatizada.</p>
-                            <div class="tech-stack mt-3 mb-4">
-                                <span class="badge bg-secondary text-dark">Shell Script</span>
-                                <span class="badge bg-secondary text-dark">Linux</span>
-                                <span class="badge bg-secondary text-dark">Git</span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="#" class="text-decoration-none fw-bold text-danger">Ver Repositório <i class="fas fa-external-link-alt ms-1"></i></a>
-                                <a href="#" class="text-muted"><i class="fab fa-github fa-lg"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="panel">
 
-    <section id="sobre" class="py-5 bg-white">
-        <div class="container py-4">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <h2 class="fw-bold mb-3">Sobre Mim</h2>
-                    <div class="heading-line bg-primary mb-4"></div>
-                    <p class="lead text-muted">Minha missão é garantir a disponibilidade, integridade e confidencialidade dos sistemas.</p>
-                    <p>Atuo na intersecção entre a engenharia de software e a segurança da informação. Acredito que a segurança não deve ser uma camada adicionada ao final de um projeto, mas sim o pilar estrutural desde a primeira linha de código (Security by Design).</p>
-                    <p>Tenho experiência no desenho de arquiteturas de sistemas eficientes, mitigação de riscos de segurança no frontend/backend e mapeamento de processos alinhados às melhores práticas do mercado.</p>
-                    
-                    <div class="row mt-4">
-                        <div class="col-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-shield-alt text-primary me-2"></i> OWASP Top 10</li>
-                                <li class="mb-2"><i class="fas fa-code text-primary me-2"></i> JavaScript / Frontend</li>
-                            </ul>
-                        </div>
-                        <div class="col-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-server text-primary me-2"></i> Análise de Vulnerabilidades</li>
-                                <li class="mb-2"><i class="fas fa-user-shield text-primary me-2"></i> LGPD & Compliance</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="p-4 bg-light rounded shadow-sm border">
-                        <h4 class="fw-bold mb-3"><i class="fas fa-terminal text-primary me-2"></i>Filosofia Profissional</h4>
-                        <hr>
-                        <blockquote class="blockquote blockquote-custom bg-white p-3 rounded border-start border-primary border-4 shadow-sm">
-                            <p class="mb-0 fs-6 text-italic">"Um sistema perfeitamente seguro é aquele que está desligado, trancado em um bloco de concreto e guardado em uma sala blindada — mas ele não tem utilidade. O verdadeiro desafio da tecnologia é equilibrar usabilidade, eficiência de código e proteção rigorosa contra ameaças."</p>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<h2>⟒ ⍜ ⊬ ☍</h2>
 
-    <section id="contato" class="py-5 bg-dark text-white">
-        <div class="container py-4">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Contate-me</h2>
-                <div class="heading-line mx-auto bg-primary"></div>
-                <p class="text-muted mt-3">Precisa de consultoria em sistemas ou análise de segurança? Envie uma mensagem.</p>
-            </div>
+<p class="alien">
+⟒⌬𖤓 ☉⍜⌬ ⟁⌬⊬ ⍜⍜☍ ⟟𖤓⌬ ⊬☉⌬
+<br><br>
+𖤓 ⌬⟁ ☉⍜ ⟒⟟⍜ ⊬⌬ ☍☉ 𖤓⌬⌬
+<br><br>
+☉⌬⍜ ⟁☉𖤓 ⊬☍⌬ ⍜⟒⌬ ☉☉☉ ⌬⌬⌬
+</p>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <form id="contactForm" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="name" class="form-label">Nome</label>
-                                <input type="text" class="form-control bg-dark text-white border-secondary" id="name" required>
-                                <div class="invalid-feedback">Por favor, insira seu nome.</div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control bg-dark text-white border-secondary" id="email" required>
-                                <div class="invalid-feedback">Por favor, informe um e-mail válido.</div>
-                            </div>
-                            <div class="col-12">
-                                <label for="message" class="form-label">Mensagem / Escopo da Demanda</label>
-                                <textarea class="form-control bg-dark text-white border-secondary" id="message" rows="5" required></textarea>
-                                <div class="invalid-feedback">Por favor, descreva sua necessidade.</div>
-                            </div>
-                            <div class="col-12 text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg px-5">Enviar Mensagem Segura</button>
-                            </div>
-                        </div>
-                    </form>
-                    
-                    <div id="formSuccessAlert" class="alert alert-success d-none mt-4 text-center" role="alert">
-                        <i class="fas fa-check-circle me-2"></i> Comunicação recebida. Entrarei em contato após a triagem.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="icons">
 
-    <footer class="bg-black py-4 text-center text-muted border-top border-secondary">
-        <div class="container">
-            <div class="social-links mb-3">
-                <a href="#" class="text-muted mx-2 fs-5"><i class="fab fa-github"></i></a>
-                <a href="#" class="text-muted mx-2 fs-5"><i class="fab fa-linkedin"></i></a>
-                <a href="#" class="text-muted mx-2 fs-5"><i class="fas fa-key"></i></a>
-            </div>
-            <p class="mb-0 small">&copy; 2026 Grego Prioli. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+<div class="item">
+<i class="fa-solid fa-atom"></i>
+<div>⌬⟁☉</div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+<div class="item">
+<i class="fa-solid fa-satellite-dish"></i>
+<div>𖤓☍⌬</div>
+</div>
+
+<div class="item">
+<i class="fa-solid fa-meteor"></i>
+<div>⊬☉⌬</div>
+</div>
+
+<div class="item">
+<i class="fa-solid fa-star"></i>
+<div>⍜⌬𖤓</div>
+</div>
+
+<div class="item">
+<i class="fa-solid fa-globe"></i>
+<div>☉☉☉</div>
+</div>
+
+<div class="item">
+<i class="fa-solid fa-rocket"></i>
+<div>⟁⟁⟁</div>
+</div>
+
+</div>
+
+<button onclick="traduzir()">
+⟒ ATIVAR DECODIFICADOR
+</button>
+
+<div id="texto"></div>
+
+</div>
+
+<footer>
+
+𖤓 ⌬⟁ ☉⍜ ⊬☉⌬ ⟟𖤓☍ 000111101010
+
+</footer>
+
+</div>
+
+<script>
+const frases=[
+"☉ = SOL CENTRAL",
+"⌬ = PORTAL QUÂNTICO",
+"𖤓 = ENERGIA VITAL",
+"⟁ = MATRIZ GALÁCTICA",
+"⊬ = NAVE BIOLÓGICA",
+"☍ = CONSCIÊNCIA COLETIVA",
+"⟒⟟⍜ = BEM-VINDO VIAJANTE",
+"⍜⌬☉ = SISTEMA XÆ-91",
+"☉☉☉ = UNIVERSO PRIMÁRIO",
+"⌬⌬⌬ = FREQUÊNCIA 884.77"
+];
+
+function traduzir(){
+document.getElementById("texto").innerHTML=
+frases[Math.floor(Math.random()*frases.length)];
+}
+
+const canvas=document.getElementById("space");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+}
+resize();
+addEventListener("resize",resize);
+
+const stars=[];
+
+for(let i=0;i<250;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+s:Math.random()*1.5+0.2
+});
+}
+
+function draw(){
+
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#7ff";
+
+for(let star of stars){
+
+ctx.beginPath();
+
+ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+
+ctx.fill();
+
+star.y+=star.s;
+
+if(star.y>canvas.height){
+
+star.y=0;
+
+star.x=Math.random()*canvas.width;
+
+}
+
+}
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+setInterval(()=>{
+
+const chars="☉⌬⟁⊬☍⟒⟟⍜𖤓Ω∆◉◈⬢";
+
+const p=document.querySelector(".alien");
+
+let txt="";
+
+for(let i=0;i<90;i++){
+
+txt+=chars[Math.floor(Math.random()*chars.length)];
+
+if(i%18==0) txt+="<br>";
+
+}
+
+p.innerHTML=txt;
+
+},4000);
+</script>
+
 </body>
 </html>
