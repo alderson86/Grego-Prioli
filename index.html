@@ -1,3 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SETI - Deep Space Receiver</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Consolas,monospace;
+}
+
+body{
+background:#01070d;
+color:#00ff9c;
+overflow:hidden;
+}
+
+canvas{
+position:fixed;
+inset:0;
+z-index:-2;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+background:repeating-linear-gradient(
+transparent 0px,
+rgba(0,255,150,.02) 2px,
+transparent 4px
+);
+animation:scan 6s linear infinite;
+z-index:-1;
+}
+
+@keyframes scan{
+from{transform:translateY(-100%)}
+to{transform:translateY(100%)}
+}
+
+#panel{
+
+width:95%;
+max-width:1300px;
+margin:20px auto;
+
+background:rgba(0,15,15,.92);
+
+border:1px solid #00ff88;
+
+padding:20px;
+
+box-shadow:0 0 20px #00ff88;
+
+}
+
+h1{
+
+color:#8dffe1;
+
+text-shadow:0 0 10px #00ff88;
+
+margin-bottom:20px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+margin-bottom:20px;
+
+}
+
+.card{
+
+border:1px solid #00ff88;
+
+padding:10px;
+
+background:#02110f;
+
+}
+
+.card h3{
+
+color:#6cffd1;
+
+margin-bottom:8px;
+
+font-size:15px;
+
+}
+
+.value{
+
+font-size:22px;
+
+}
+
+#terminal{
+
+height:320px;
+
+overflow:auto;
+
+background:black;
+
+padding:15px;
+
+border:1px solid #00ff88;
+
+white-space:pre-wrap;
+
+line-height:1.5;
+
+margin-top:20px;
+
+}
+
+#decode{
+
+margin-top:20px;
+
+font-size:22px;
+
+color:#fff88f;
+
+}
+
+button{
+
+margin-top:20px;
+
+padding:12px 30px;
+
+background:#00aa55;
+
+border:none;
+
+color:white;
+
+cursor:pointer;
+
+font-size:16px;
+
+}
+
+button:hover{
+
+background:#00dd88;
+
+}
+
+.blink{
+
+animation:blink .8s infinite;
+
+}
+
+@keyframes blink{
+50%{opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<div id="panel">
+
+<h1>SETI • DEEP SPACE SIGNAL ANALYZER</h1>
+
+<div class="grid">
+
+<div class="card">
+<h3>Status</h3>
+<div class="value"><span class="blink">●</span> RECEBENDO</div>
+</div>
+
+<div class="card">
+<h3>Origem Estimada</h3>
+<div class="value">NGC 1300</div>
+</div>
+
+<div class="card">
+<h3>Frequência</h3>
+<div class="value" id="freq">1420.405 MHz</div>
+</div>
+
+<div class="card">
+<h3>Relação S/R</h3>
+<div class="value" id="snr">98.2 dB</div>
+</div>
+
+</div>
+
+<div id="terminal"></div>
+
+<button onclick="startSignal()">Capturar Nova Transmissão</button>
+
+<div id="decode">
+Aguardando decodificação...
+</div>
+
+</div>
+
+<script>
+
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+const stars=[];
+
+for(let i=0;i<450;i++){
+
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2
+});
+
+}
+
+function draw(){
+
+ctx.fillStyle="#000814";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff88";
+
+for(let s of stars){
+
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+
+s.y+=0.15;
+
+if(s.y>canvas.height)s.y=0;
+
+}
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+function byte(){
+
+return Math.floor(Math.random()*256)
+.toString(2)
+.padStart(8,"0");
+
+}
+
+const terminal=document.getElementById("terminal");
+
+function gerar(){
+
+let txt="";
+
+for(let i=0;i<25;i++){
+
+for(let j=0;j<9;j++){
+
+txt+=byte()+" ";
+
+}
+
+txt+="\n";
+
+}
+
+terminal.textContent=txt;
+
+document.getElementById("freq").innerHTML=
+(1418+Math.random()*5).toFixed(3)+" MHz";
+
+document.getElementById("snr").innerHTML=
+(92+Math.random()*8).toFixed(2)+" dB";
+
+}
+
+let audio;
+
+function beep(freq,duration){
+
+if(!audio){
+
+audio=new(window.AudioContext||window.webkitAudioContext)();
+
+}
+
+const osc=audio.createOscillator();
+
+const gain=audio.createGain();
+
+osc.type="sine";
+
+osc.frequency.value=freq;
+
+gain.gain.value=.03;
+
+osc.connect(gain);
+
+gain.connect(audio.destination);
+
+osc.start();
+
+osc.stop(audio.currentTime+duration);
+
+}
+
+function sequence(){
+
+let t=0;
+
+for(let i=0;i<12;i++){
+
+setTimeout(()=>{
+
+beep(500+Math.random()*900,.08);
+
+},t);
+
+t+=150;
+
+}
+
+}
+
+function startSignal(){
+
+document.getElementById("decode").innerHTML=
+"Analisando sequência binária...";
+
+gerar();
+
+sequence();
+
+setTimeout(()=>{
+
+document.getElementById("decode").innerHTML=
+"<b>DECODIFICAÇÃO PARCIAL</b><br><br>"+
+"Idioma identificado: <b>Sumério (transliteração)</b><br>"+
+"Mensagem reconhecida: <span style='color:#7cffff;font-size:30px'>TI</span><br><br>"+
+"Significado aproximado: <b>VIDA</b>";
+
+},3500);
+
+}
+
+startSignal();
+
+setInterval(gerar,5000);
+
+</script>
 let audioCtx;
 let noiseSource;
 let gainNoise;
@@ -87,3 +461,392 @@ function telemetria(){
     },300);
 
 }
+iniciarRadio();
+        <!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>SETI Deep Space Receiver</title>
+
+<style>
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+font-family:Consolas,monospace;
+
+}
+
+body{
+
+background:#01070d;
+
+overflow:hidden;
+
+color:#00ff99;
+
+}
+
+canvas{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+z-index:-2;
+
+}
+
+body:before{
+
+content:"";
+
+position:fixed;
+
+inset:0;
+
+background:
+
+repeating-linear-gradient(
+
+transparent 0px,
+
+rgba(0,255,140,.03) 2px,
+
+transparent 4px
+
+);
+
+animation:scan 6s linear infinite;
+
+z-index:-1;
+
+}
+
+@keyframes scan{
+
+from{
+
+transform:translateY(-100%);
+
+}
+
+to{
+
+transform:translateY(100%);
+
+}
+
+}
+
+#container{
+
+width:95%;
+
+max-width:1400px;
+
+margin:20px auto;
+
+background:rgba(0,20,15,.92);
+
+border:1px solid #00ff88;
+
+box-shadow:
+
+0 0 15px #00ff88,
+
+0 0 35px rgba(0,255,136,.25);
+
+padding:20px;
+
+}
+
+h1{
+
+text-align:center;
+
+margin-bottom:20px;
+
+font-size:34px;
+
+color:#7dffe3;
+
+text-shadow:0 0 15px #00ff99;
+
+}
+
+.status{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
+margin-bottom:20px;
+
+}
+
+.card{
+
+border:1px solid #00ff88;
+
+padding:15px;
+
+background:#021410;
+
+}
+
+.card h3{
+
+font-size:15px;
+
+margin-bottom:8px;
+
+color:#7dffe3;
+
+}
+
+.valor{
+
+font-size:24px;
+
+}
+
+#scope{
+
+height:170px;
+
+background:black;
+
+border:1px solid #00ff88;
+
+position:relative;
+
+overflow:hidden;
+
+margin-bottom:20px;
+
+}
+
+#scope canvas{
+
+position:absolute;
+
+}
+
+#terminal{
+
+height:320px;
+
+background:black;
+
+border:1px solid #00ff88;
+
+padding:15px;
+
+overflow:auto;
+
+white-space:pre-wrap;
+
+line-height:1.6;
+
+font-size:14px;
+
+}
+
+#decoder{
+
+margin-top:20px;
+
+padding:15px;
+
+border:1px solid #00ff88;
+
+background:#021410;
+
+font-size:20px;
+
+min-height:120px;
+
+}
+
+button{
+
+margin-top:20px;
+
+padding:12px 30px;
+
+font-size:18px;
+
+background:#00aa55;
+
+color:white;
+
+border:none;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#00dd88;
+
+box-shadow:0 0 15px #00ff88;
+
+}
+
+.blink{
+
+animation:blink .8s infinite;
+
+}
+
+@keyframes blink{
+
+50%{
+
+opacity:0;
+
+}
+
+}
+
+#waterfall{
+
+margin-top:20px;
+
+height:180px;
+
+background:black;
+
+border:1px solid #00ff88;
+
+overflow:hidden;
+
+font-size:10px;
+
+line-height:10px;
+
+color:#00ff88;
+
+padding:5px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="space"></canvas>
+
+<div id="container">
+
+<h1>SETI • DEEP SPACE SIGNAL RECEIVER</h1>
+
+<div class="status">
+
+<div class="card">
+
+<h3>Status</h3>
+
+<div class="valor">
+
+<span class="blink">●</span>
+
+RECEBENDO
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Origem Estimada</h3>
+
+<div class="valor">
+
+NGC 1300
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Frequência</h3>
+
+<div class="valor" id="freq">
+
+1420.405 MHz
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>SNR</h3>
+
+<div class="valor" id="snr">
+
+97.8 dB
+
+</div>
+
+</div>
+
+</div>
+
+<div id="scope">
+
+<canvas id="oscillo"></canvas>
+
+</div>
+
+<div id="terminal">
+
+AGUARDANDO TRANSMISSÃO...
+
+</div>
+
+<div id="waterfall"></div>
+
+<button onclick="startTransmission()">
+
+CAPTURAR TRANSMISSÃO
+
+</button>
+
+<div id="decoder">
+
+Aguardando decodificação...
+
+</div>
+
+<script>
+
+    iniciarRadio();
+</body>
+</html>
