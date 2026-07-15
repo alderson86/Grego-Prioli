@@ -3,42 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROTOCOLO // LINK DESCONHECIDO</title>
+<title>SETI Deep Space Monitor</title>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
 body{
-    background:#020304;
-    color:#00ff88;
-    font-family:Consolas,monospace;
-    overflow:hidden;
+margin:0;
+background:#000814;
+color:#00ff88;
+font-family:Consolas,monospace;
+overflow:hidden;
 }
 
-/* Fundo */
 canvas{
-    position:fixed;
-    inset:0;
-    z-index:-2;
+position:fixed;
+inset:0;
+z-index:-2;
 }
 
-body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-    repeating-linear-gradient(
-        transparent 0px,
-        rgba(0,255,150,.03) 2px,
-        transparent 4px
-    );
-    animation:scan 8s linear infinite;
-    z-index:-1;
+body:before{
+content:"";
+position:fixed;
+inset:0;
+background:
+repeating-linear-gradient(
+transparent 0px,
+rgba(0,255,120,.04) 2px,
+transparent 4px);
+animation:scan 6s linear infinite;
+z-index:-1;
 }
 
 @keyframes scan{
@@ -46,126 +39,105 @@ from{transform:translateY(-100%);}
 to{transform:translateY(100%);}
 }
 
-#terminal{
+#painel{
 
-width:95%;
-max-width:1200px;
+width:92%;
+max-width:1300px;
 
-margin:25px auto;
-
-background:rgba(0,15,8,.90);
+margin:20px auto;
 
 border:1px solid #00ff88;
 
 padding:20px;
 
-box-shadow:
-0 0 10px #00ff88,
-0 0 30px rgba(0,255,136,.3);
+background:rgba(0,10,5,.92);
+
+box-shadow:0 0 25px #00ff88;
 
 }
 
 h1{
-
-color:#7dffcb;
-margin-bottom:10px;
-text-shadow:0 0 15px #00ff88;
-
+margin:0;
+font-size:30px;
+text-shadow:0 0 10px #00ff88;
 }
 
-.status{
+.grid{
 
-display:flex;
-gap:20px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+
+gap:15px;
+
 margin:20px 0;
-flex-wrap:wrap;
 
 }
 
 .card{
 
-flex:1;
-min-width:220px;
-
 border:1px solid #00ff88;
-padding:10px;
 
-background:#02140d;
+padding:12px;
 
-}
-
-.card h3{
-
-color:#8fffd5;
-margin-bottom:10px;
+background:#02150d;
 
 }
 
-#stream{
+.card b{
 
-height:320px;
+color:#8fffca;
+
+}
+
+#terminal{
+
+height:330px;
 
 overflow:auto;
-
-white-space:pre-wrap;
 
 background:black;
 
 padding:15px;
 
-border:1px solid #00aa55;
+border:1px solid #00aa66;
+
+white-space:pre-wrap;
+
+font-size:15px;
 
 line-height:1.5;
 
 }
 
-button{
+#mensagem{
 
 margin-top:20px;
 
-padding:12px 25px;
+padding:15px;
 
-background:#00aa55;
+border:1px solid #00ff88;
 
-border:none;
+background:#02150d;
 
-color:white;
+font-size:22px;
 
-cursor:pointer;
-
-font-size:16px;
-
-transition:.3s;
+color:#9fffd7;
 
 }
 
-button:hover{
+#status{
 
-background:#00dd77;
+color:#00ff88;
 
-box-shadow:0 0 15px #00ff88;
-
-}
-
-#translate{
-
-margin-top:20px;
-
-color:#8fffd5;
-
-font-size:18px;
+animation:pulse 1s infinite;
 
 }
 
-.blink{
+@keyframes pulse{
 
-animation:blink 1s infinite;
-
+50%{
+opacity:.4;
 }
-
-@keyframes blink{
-
-50%{opacity:0;}
 
 }
 
@@ -175,109 +147,94 @@ animation:blink 1s infinite;
 
 <body>
 
-<canvas id="stars"></canvas>
+<canvas id="space"></canvas>
 
-<div id="terminal">
+<div id="painel">
 
-<h1>TRANSMISSÃO EXTRASSOLAR</h1>
+<h1>SETI • DEEP SPACE RECEIVER</h1>
 
-<p>Estado do Canal:
-<span class="blink">●</span>
-Conectado</p>
-
-<div class="status">
-
-<div class="card">
-<h3>Frequência</h3>
-<div id="freq">1420.405 MHz</div>
+<div id="status">
+● RECEBENDO PORTADORA DE BANDA ESTREITA
 </div>
 
+<div class="grid">
+
 <div class="card">
-<h3>Intensidade</h3>
-<div id="signal">98.42%</div>
+<b>Origem</b><br>
+Catálogo: GX-4819
 </div>
 
 <div class="card">
-<h3>Origem</h3>
-<div>DESCONHECIDA</div>
+<b>Distância</b><br>
+≈ 2,4 milhões de anos-luz
 </div>
 
 <div class="card">
-<h3>Codificação</h3>
-<div>BINÁRIO 8 BITS</div>
+<b>Frequência</b><br>
+1420.405 MHz
+</div>
+
+<div class="card">
+<b>SNR</b><br>
+97.83 dB
 </div>
 
 </div>
 
-<div id="stream"></div>
+<div id="terminal"></div>
 
-<button onclick="novaTransmissao()">
-Capturar Nova Transmissão
-</button>
-
-<div id="translate">
-
+<div id="mensagem">
 AGUARDANDO DECODIFICAÇÃO...
-
 </div>
 
 </div>
 
 <script>
 
-/* Fundo estrelado */
-
-const canvas=document.getElementById("stars");
-
+const canvas=document.getElementById("space");
 const ctx=canvas.getContext("2d");
 
 canvas.width=innerWidth;
 canvas.height=innerHeight;
 
-const estrelas=[];
+const stars=[];
 
-for(let i=0;i<350;i++){
+for(let i=0;i<500;i++){
 
-estrelas.push({
+stars.push({
 
 x:Math.random()*canvas.width,
-
 y:Math.random()*canvas.height,
-
 r:Math.random()*2
 
 });
 
 }
 
-function desenhar(){
+function draw(){
 
-ctx.fillStyle="#000";
+ctx.fillStyle="#000814";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
 ctx.fillStyle="#00ff88";
 
-for(let s of estrelas){
+stars.forEach(s=>{
 
 ctx.beginPath();
-
 ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-
 ctx.fill();
 
-s.y+=0.2;
+s.y+=0.15;
 
 if(s.y>canvas.height)s.y=0;
 
+});
+
+requestAnimationFrame(draw);
+
 }
 
-requestAnimationFrame(desenhar);
-
-}
-
-desenhar();
-
-/* Comunicação */
+draw();
 
 function byte(){
 
@@ -287,62 +244,77 @@ return Math.floor(Math.random()*256)
 
 }
 
-const traducoes=[
+const terminal=document.getElementById("terminal");
 
-"SINAL RECEBIDO",
+let audioCtx=null;
 
-"PACOTE CORROMPIDO",
+function beep(freq,dur){
 
-"SEQUÊNCIA ESTÁVEL",
+if(!audioCtx)
+audioCtx=new(window.AudioContext||window.webkitAudioContext)();
 
-"PADRÃO DESCONHECIDO",
+const osc=audioCtx.createOscillator();
+const gain=audioCtx.createGain();
 
-"PROTOCOLO NÃO CATALOGADO",
+osc.type="sine";
+osc.frequency.value=freq;
 
-"ANALISANDO",
+osc.connect(gain);
+gain.connect(audioCtx.destination);
 
-"INTERFERÊNCIA DETECTADA",
+gain.gain.value=0.05;
 
-"SINCRONIZAÇÃO PARCIAL",
+osc.start();
 
-"ESTRUTURA REPETITIVA",
+setTimeout(()=>{
 
-"PACOTE ACEITO"
+osc.stop();
 
-];
-
-function novaTransmissao(){
-
-let texto="";
-
-for(let i=0;i<24;i++){
-
-for(let j=0;j<10;j++){
-
-texto+=byte()+" ";
+},dur);
 
 }
 
-texto+="\n";
+let linhas=0;
+
+function receber(){
+
+let linha="";
+
+for(let i=0;i<12;i++)
+linha+=byte()+" ";
+
+terminal.textContent+=linha+"\n";
+
+terminal.scrollTop=terminal.scrollHeight;
+
+beep(500+Math.random()*800,80);
+
+linhas++;
+
+if(linhas==18){
+
+document.getElementById("mensagem").innerHTML=`
+SINAL DECODIFICADO
+
+SUMÉRIO:
+<br><br>
+
+<font style="font-size:42px;color:#ffffff;">
+𒍣
+</font>
+
+<br><br>
+
+Transliteração: <b>ZI</b>
+
+Significado: <b>VIDA</b>
+`;
 
 }
 
-document.getElementById("stream").textContent=texto;
-
-document.getElementById("translate").innerHTML=
-"> "+traducoes[Math.floor(Math.random()*traducoes.length)];
-
-document.getElementById("signal").innerHTML=
-(90+Math.random()*10).toFixed(2)+"%";
-
-document.getElementById("freq").innerHTML=
-(1400+Math.random()*50).toFixed(3)+" MHz";
-
 }
 
-novaTransmissao();
-
-setInterval(novaTransmissao,6000);
+setInterval(receber,350);
 
 </script>
 
